@@ -37,7 +37,7 @@ export class LetterManager {
     this.cancelAutoTimers();
     this.hasOpened = false;
 
-    // 1. Sau đúng 10 giây từ khi mở cổng: Hiển thị thông báo có thư lên trước
+    // 1. Sau đúng 8 giây từ khi mở cổng: Hiển thị thông báo có thư lên trước
     this.timerToast = setTimeout(() => {
       if (this.hasOpened) return;
       this.showToast();
@@ -47,7 +47,7 @@ export class LetterManager {
         if (this.hasOpened) return;
         this.showEnvelope();
       }, 1400);
-    }, 10000);
+    }, 8000);
   }
 
   init() {

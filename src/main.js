@@ -95,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
         welcomeGate.style.display = 'none';
       }, 850);
 
-      // 6. Bắt đầu chuỗi đếm giờ 10s xuất hiện thư
+      // 6. Bắt đầu chuỗi đếm giờ 8s xuất hiện thư
       if (letterManager) {
         letterManager.startSequence();
       }

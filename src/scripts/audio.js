@@ -28,25 +28,6 @@ export class AudioManager {
       e.stopPropagation();
       this.togglePlay();
     });
-
-    // 1. Cố gắng phát nhạc ngay lập tức khi vừa vào web
-    this.play();
-
-    // 2. Tự động kích hoạt khi có tương tác chạm/vuốt/click đầu tiên nếu trình duyệt chặn autoplay
-    const unlockAudio = () => {
-      if (!this.isPlaying) {
-        this.play();
-      }
-      ['click', 'touchstart', 'pointerdown', 'scroll', 'keydown'].forEach(evt => {
-        document.removeEventListener(evt, unlockAudio);
-        window.removeEventListener(evt, unlockAudio);
-      });
-    };
-
-    ['click', 'touchstart', 'pointerdown', 'scroll', 'keydown'].forEach(evt => {
-      document.addEventListener(evt, unlockAudio, { passive: true, once: true });
-      window.addEventListener(evt, unlockAudio, { passive: true, once: true });
-    });
   }
 
   initAudioContext() {

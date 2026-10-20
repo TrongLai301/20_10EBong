@@ -63,24 +63,32 @@
   to { transform: rotate(360deg); }
 }
 
-/* Greeting Banner */
+/* Greeting Banner - Chỉ xuất hiện & chạy animation sau khi mở cổng */
 .greeting-banner {
   position: absolute;
   top: 14%;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%, -20px);
   width: 92%;
   max-width: 680px;
   text-align: center;
   z-index: 10;
   pointer-events: none;
-  animation: fadeInDown 1.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
+  visibility: hidden;
   transition: opacity 0.8s ease, transform 0.8s ease;
 }
 
+.greeting-banner.active {
+  visibility: visible;
+  animation: fadeInDown 1.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
 .greeting-banner.fade-out {
-  opacity: 0;
-  transform: translate(-50%, -25px);
+  opacity: 0 !important;
+  transform: translate(-50%, -25px) !important;
+  visibility: hidden;
+  transition: opacity 0.8s ease, transform 0.8s ease;
 }
 
 .sparkle-badge {
@@ -127,7 +135,10 @@
   text-shadow: 0 0 16px rgba(255, 209, 102, 0.5);
   opacity: 0;
   transform: translateY(12px);
-  animation: fadeInComingSoon 1.2s 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.greeting-banner.active .greeting-coming-soon {
+  animation: fadeInComingSoon 1.2s 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 @keyframes fadeInComingSoon {
@@ -173,5 +184,187 @@
     letter-spacing: 1.5px;
     padding: 4px 12px;
     margin-bottom: 10px;
+  }
+}
+
+/* =========================================
+   CÁNH CỔNG TRÁI TIM LUNG LINH (WELCOME GATE)
+   ========================================= */
+.welcome-gate {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100%;
+  height: 100dvh;
+  background: radial-gradient(ellipse at center, #261338 0%, #11081e 65%, #06020a 100%);
+  z-index: 500;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.85s;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.welcome-gate.gate-opened {
+  opacity: 0;
+  transform: scale(1.12);
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.gate-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 480px;
+  width: 100%;
+  z-index: 10;
+}
+
+.gate-badge {
+  margin-bottom: 24px;
+}
+
+/* Cánh cổng trái tim phát sáng */
+.heart-gate-wrapper {
+  position: relative;
+  width: 220px;
+  height: 200px;
+  margin: 0 auto 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: heartGateFloat 3.2s ease-in-out infinite;
+}
+
+.heart-gate-svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 0 25px rgba(255, 117, 140, 0.65)) drop-shadow(0 0 50px rgba(255, 209, 102, 0.35));
+  animation: heartGatePulse 2.2s ease-in-out infinite;
+  transform-origin: center center;
+}
+
+.heart-ripple {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 117, 140, 0.5);
+  transform: translate(-50%, -50%) scale(0.6);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.heart-ripple.r1 {
+  animation: rippleExpand 2.8s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
+}
+
+.heart-ripple.r2 {
+  animation: rippleExpand 2.8s 1.4s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
+}
+
+@keyframes rippleExpand {
+  0% {
+    transform: translate(-50%, -50%) scale(0.6);
+    opacity: 0.8;
+    border-color: rgba(255, 117, 140, 0.6);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.6);
+    opacity: 0;
+    border-color: rgba(255, 209, 102, 0);
+  }
+}
+
+@keyframes heartGatePulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.06);
+  }
+}
+
+@keyframes heartGateFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.gate-title {
+  font-family: var(--font-serif);
+  font-size: clamp(20px, 5.2vw, 28px);
+  font-weight: 700;
+  background: linear-gradient(135deg, #ffffff 40%, var(--color-pink-light) 75%, var(--color-gold) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 20px;
+  line-height: 1.4;
+}
+
+.gate-btn {
+  background: linear-gradient(135deg, #ff5e7e, #ff85a2);
+  color: #fff;
+  padding: 14px 34px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 999px;
+  box-shadow: 0 8px 30px rgba(255, 94, 126, 0.55), 0 0 25px rgba(255, 117, 140, 0.4);
+  animation: gateBtnPulse 1.8s ease-in-out infinite;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition: transform 0.25s ease;
+}
+
+.gate-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 35px rgba(255, 94, 126, 0.7);
+}
+
+.gate-hint {
+  margin-top: 18px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.75);
+  font-weight: 400;
+  letter-spacing: 0.3px;
+}
+
+@keyframes gateBtnPulse {
+  0%, 100% {
+    box-shadow: 0 8px 30px rgba(255, 94, 126, 0.5), 0 0 20px rgba(255, 117, 140, 0.3);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 12px 38px rgba(255, 94, 126, 0.75), 0 0 35px rgba(255, 209, 102, 0.5);
+    transform: scale(1.04);
+  }
+}
+
+@media (max-width: 480px) {
+  .heart-gate-wrapper {
+    width: 190px;
+    height: 175px;
+    margin-bottom: 22px;
+  }
+  .gate-btn {
+    padding: 13px 26px;
+    font-size: 15px;
   }
 }

@@ -32,10 +32,12 @@ export class LetterManager {
     this.init();
   }
 
-  init() {
-    this.updateDate();
+  startSequence() {
+    if (this.hasOpened) return;
+    this.cancelAutoTimers();
+    this.hasOpened = false;
 
-    // 1. Sau đúng 10 giây: Hiển thị thông báo có thư lên trước (chỉ chạy nếu người dùng CHƯA bấm mở thư sớm)
+    // 1. Sau đúng 10 giây từ khi mở cổng: Hiển thị thông báo có thư lên trước
     this.timerToast = setTimeout(() => {
       if (this.hasOpened) return;
       this.showToast();
@@ -46,6 +48,15 @@ export class LetterManager {
         this.showEnvelope();
       }, 1400);
     }, 10000);
+  }
+
+  init() {
+    this.updateDate();
+
+    // Nếu không có welcome-gate thì tự động chạy sequence (fallback)
+    if (!document.getElementById('welcome-gate')) {
+      this.startSequence();
+    }
 
     // Mở thư sớm / Mở lại thư khi click nút góc phải
     if (this.quickBtn) {

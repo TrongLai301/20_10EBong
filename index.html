@@ -30,6 +30,49 @@
   </head>
   <body>
     <div id="app">
+      <!-- Cánh Cổng Trái Tim Lung Linh (Chạm để mở cổng & kích hoạt nhạc) -->
+      <div id="welcome-gate" class="welcome-gate">
+        <div class="gate-content">
+          <div class="sparkle-badge gate-badge">✨ 20 · 10 · 2026 ✨</div>
+
+          <!-- Trái tim phát sáng nhịp đập lung linh -->
+          <div class="heart-gate-wrapper" id="heart-gate-trigger">
+            <svg class="heart-gate-svg" viewBox="0 0 260 240">
+              <defs>
+                <linearGradient id="gateHeartGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#ff758c" />
+                  <stop offset="50%" stop-color="#ffd166" />
+                  <stop offset="100%" stop-color="#ff5e7e" />
+                </linearGradient>
+                <filter id="gateGlow" x="-20%" y="-20%" width="140%" height="140%">
+                  <feGaussianBlur stdDeviation="8" result="blur" />
+                  <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                </filter>
+              </defs>
+              <!-- Hào quang ngoài -->
+              <path class="heart-path-pulse" d="M 130,225 C 20,135 10,40 85,25 C 120,20 130,55 130,55 C 130,55 140,20 175,25 C 250,40 240,135 130,225 Z" fill="rgba(255, 117, 140, 0.15)" stroke="url(#gateHeartGrad)" stroke-width="2.5" filter="url(#gateGlow)" />
+              <!-- Thân cổng trái tim -->
+              <path class="heart-path-main" d="M 130,215 C 30,130 20,45 90,30 C 120,25 130,60 130,60 C 130,60 140,25 170,30 C 240,45 230,130 130,215 Z" fill="url(#gateHeartGrad)" fill-opacity="0.22" stroke="url(#gateHeartGrad)" stroke-width="3" />
+              <!-- Biểu tượng hoa anh đào giữa cổng -->
+              <circle cx="130" cy="115" r="26" fill="rgba(255, 255, 255, 0.2)" stroke="#ffd166" stroke-width="1.8" />
+              <text x="130" y="124" font-size="24" text-anchor="middle">🌸</text>
+            </svg>
+            <div class="heart-ripple r1"></div>
+            <div class="heart-ripple r2"></div>
+          </div>
+
+          <h2 class="gate-title">Khu Vườn Bí Mật Dành Cho Em Bống</h2>
+          
+          <button class="btn gate-btn" id="btn-open-gate" aria-label="Chạm để mở cổng">
+            <span class="gate-btn-icon">✨</span>
+            <span>Chạm để mở cổng</span>
+            <span class="gate-btn-icon">💕</span>
+          </button>
+
+          <p class="gate-hint">🎵 Hãy bật âm lượng điện thoại để cảm nhận trọn vẹn nhé</p>
+        </div>
+      </div>
+
       <!-- Background & Canvas Vườn hoa -->
       <canvas id="garden-canvas"></canvas>
 

@@ -405,9 +405,9 @@
 .letter-paper {
   background: var(--color-paper);
   background-image: 
-    radial-gradient(#e2d9cd 0.8px, transparent 0.8px),
-    linear-gradient(to bottom, transparent 29px, rgba(226, 217, 205, 0.55) 30px);
-  background-size: 16px 16px, 100% 30px;
+    radial-gradient(rgba(215, 203, 190, 0.45) 0.75px, transparent 0.75px),
+    linear-gradient(to bottom, transparent 31px, rgba(226, 217, 205, 0.4) 32px);
+  background-size: 18px 18px, 100% 32px;
   border-radius: 18px;
   padding: 24px 22px 18px;
   box-shadow: 0 25px 70px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(0, 0, 0, 0.08);
@@ -437,57 +437,75 @@
 
 .stamp-mark {
   font-size: 12px;
-  color: #c94b65;
+  color: #b83350;
   font-weight: 600;
   letter-spacing: 1px;
-  border: 1px solid rgba(201, 75, 101, 0.35);
+  border: 1px solid rgba(184, 51, 80, 0.4);
   padding: 2px 7px;
   border-radius: 4px;
 }
 
 .letter-date {
   font-size: 12px;
-  color: #887a6d;
+  color: #75675b;
   font-style: italic;
+  font-weight: 500;
 }
 
 .letter-content {
   font-family: var(--font-handwriting);
-  font-size: clamp(17px, 4vw, 20px);
-  color: #2b221d;
-  line-height: 1.55;
-  letter-spacing: 0.3px;
+  font-size: clamp(18.5px, 4.3vw, 21.5px);
+  font-weight: 600;
+  color: #17110e; /* Màu mực bút máy đen nâu cổ điển, đậm đà, sắc nét và cực kỳ dễ đọc */
+  line-height: 1.62;
+  letter-spacing: 0.35px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 .letter-content p {
-  margin-bottom: 10px;
+  margin-bottom: 12px;
+  color: #17110e;
+  font-weight: 600;
 }
 
 .salutation {
-  font-size: clamp(20px, 4.4vw, 24px);
+  font-size: clamp(21px, 4.6vw, 25px);
   font-weight: 700;
-  color: #8c263e;
+  color: #8c1d37;
 }
 
 .letter-question {
-  margin: 12px 0 10px;
+  margin: 14px 0 12px;
   font-weight: 700;
-  color: #9e2a47;
-  background: rgba(255, 117, 140, 0.12);
-  padding: 10px 14px;
-  border-radius: 8px;
-  border-left: 4px solid #ff758c;
+  color: #7b152d;
+  background: rgba(255, 117, 140, 0.14);
+  padding: 12px 14px;
+  border-radius: 10px;
+  border-left: 4px solid #ff5e7e;
+  line-height: 1.6;
+}
+
+.letter-question p {
+  color: #7b152d;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.letter-question p:last-child {
+  margin-bottom: 0;
 }
 
 .letter-signature {
   text-align: right;
-  margin-top: 10px;
+  margin-top: 12px;
   font-style: italic;
 }
 
 .handwritten-name {
-  font-size: 24px;
-  color: #b33951;
+  font-size: 25px;
+  color: #a62343;
   font-weight: 700;
 }
 

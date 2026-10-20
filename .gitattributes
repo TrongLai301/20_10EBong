@@ -1,0 +1,11 @@
+# Tự động chuẩn hóa dấu xuống dòng cho mọi file code giữa Windows và macOS
+* text=auto eol=lf
+
+# Khai báo rõ ràng các file binary không bị chuyển đổi
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.mp3 binary
+*.svg text

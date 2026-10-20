@@ -396,8 +396,9 @@
   font-size: 16px !important;
   color: #fff;
   outline: none;
-  transition: var(--transition-smooth);
+  transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
   box-sizing: border-box;
+  -webkit-appearance: none;
 }
 
 .reply-form input[type="text"]:focus,
@@ -409,6 +410,10 @@
 
 .reply-form textarea {
   resize: none;
+  line-height: 1.55;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  transform: translateZ(0);
 }
 
 .btn-submit {

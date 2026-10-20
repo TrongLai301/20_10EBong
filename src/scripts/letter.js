@@ -1,6 +1,7 @@
 /**
  * letter.js - Envelope 3D Interactions, Zero-Horn Geometry, Staggered Toast, Center Reconsider & Smooth UX
  */
+import { sfx } from './sfx.js';
 
 export class LetterManager {
   constructor({ onAccept, onReject }) {
@@ -37,7 +38,7 @@ export class LetterManager {
     this.cancelAutoTimers();
     this.hasOpened = false;
 
-    // 1. Sau đúng 8 giây từ khi mở cổng: Hiển thị thông báo có thư lên trước
+    // 1. Sau đúng 6 giây từ khi mở cổng: Hiển thị thông báo có thư lên trước
     this.timerToast = setTimeout(() => {
       if (this.hasOpened) return;
       this.showToast();
@@ -47,7 +48,7 @@ export class LetterManager {
         if (this.hasOpened) return;
         this.showEnvelope();
       }, 1400);
-    }, 8000);
+    }, 6000);
   }
 
   init() {
@@ -108,6 +109,7 @@ export class LetterManager {
     if (this.btnAccept) {
       this.btnAccept.addEventListener('click', (e) => {
         e.stopPropagation();
+        sfx.playAgreeChord();
         this.closeLetterModalDirectly();
         if (this.onAccept) this.onAccept();
       });
@@ -134,6 +136,7 @@ export class LetterManager {
 
   showToast() {
     if (this.hasOpened) return;
+    sfx.playNotification();
     if (this.toast) {
       this.toast.classList.remove('hidden');
       this.toast.classList.remove('hiding');
@@ -159,6 +162,7 @@ export class LetterManager {
 
   showEnvelope() {
     if (this.hasOpened) return;
+    sfx.playEnvelopeArrival();
     if (this.wrapper) {
       this.wrapper.classList.remove('vanish');
       this.wrapper.classList.add('bounce-in');
@@ -213,6 +217,7 @@ export class LetterManager {
 
   openLetter() {
     this.isOpened = true;
+    sfx.playEnvelopeOpen();
     this.cancelAutoTimers();
     this.hideCenterReconsider();
     this.removeComingSoonText();

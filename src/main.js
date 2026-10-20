@@ -5,10 +5,14 @@ import { GardenCanvas } from './scripts/garden.js';
 import { AudioManager } from './scripts/audio.js';
 import { LetterManager } from './scripts/letter.js';
 import { ModalManager } from './scripts/modal.js';
+import { sfx } from './scripts/sfx.js';
 
 import confetti from 'canvas-confetti';
 
 document.addEventListener('DOMContentLoaded', () => {
+  // 0. Tự động gắn hiệu ứng âm thanh click nút êm dịu
+  sfx.attachButtonSounds();
+
   // 1. Khởi động Vườn hoa Canvas
   const garden = new GardenCanvas('garden-canvas');
 
@@ -38,6 +42,12 @@ document.addEventListener('DOMContentLoaded', () => {
       if (letterManager) {
         letterManager.handleRejected();
       }
+    },
+    onModalOpen: () => {
+      garden.pause();
+    },
+    onModalClose: () => {
+      garden.resume();
     }
   });
 
@@ -95,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
         welcomeGate.style.display = 'none';
       }, 850);
 
-      // 6. Bắt đầu chuỗi đếm giờ 8s xuất hiện thư
+      // 6. Bắt đầu chuỗi đếm giờ 6s xuất hiện thư
       if (letterManager) {
         letterManager.startSequence();
       }

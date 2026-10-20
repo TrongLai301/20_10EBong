@@ -27,6 +27,7 @@
     <link rel="stylesheet" href="/src/styles/garden.css" />
     <link rel="stylesheet" href="/src/styles/letter.css" />
     <link rel="stylesheet" href="/src/styles/modal.css" />
+    <link rel="stylesheet" href="/src/styles/textRain.css" />
   </head>
   <body>
     <div id="app">
@@ -88,7 +89,7 @@
         </button>
       </header>
 
-      <!-- Dòng chữ chúc mừng 20/10 phát sáng (Hiển thị mở màn 0s - 8s) -->
+      <!-- Dòng chữ chúc mừng 20/10 phát sáng (Hiển thị mở màn 0s - 6s) -->
       <div id="greeting-banner" class="greeting-banner">
         <div class="sparkle-badge">✨ 20 · 10 · 2026 ✨</div>
         <h1 class="greeting-title">Chúc em Bống một ngày 20/10 thật rực rỡ và yêu đời!</h1>
@@ -96,7 +97,7 @@
         <p class="greeting-subtitle greeting-coming-soon" id="greeting-coming-soon">Đừng vội đi đâu nhé, có một cái gì đó sắp đến!!! ✨</p>
       </div>
 
-      <!-- Toast thông báo có thư (Sau 8s hoặc bấm sớm) -->
+      <!-- Toast thông báo có thư (Sau 6s hoặc bấm sớm) -->
       <div id="letter-toast" class="letter-toast hidden">
         <div class="toast-avatar">💌</div>
         <div class="toast-body">
@@ -105,7 +106,7 @@
         </div>
       </div>
 
-      <!-- Phong bì thư 3D (Xuất hiện sau 8s) -->
+      <!-- Phong bì thư 3D (Xuất hiện sau 6s) -->
       <div id="envelope-section" class="envelope-section hidden">
         <div class="envelope-wrapper" id="envelope-wrapper">
           <div class="envelope" id="envelope">
@@ -160,20 +161,27 @@
             </div>
 
             <div class="letter-content">
-              <p class="salutation">Gửi em Bống đáng yêu,</p>
-              <p>
-                Nhân ngày 20/10, anh muốn gửi đến em đôi dòng tâm sự nắn nót từ đáy lòng. 6 ngày nữa là cũng được 4 tháng biết đến nhau đó, Tuy chưa được lâu nhưng có gì đó trong anh đã rung động với ebong rồi.
-              </p>
-              <p>
+              <p class="salutation">Gửi cô gái nhỏ đáng yêu,</p>
+               <p>
                 Chúc em một ngày 20/10 thật trọn vẹn, luôn xinh đẹp, hạnh phúc, luôn được yêu thương chiều chuộng và mãi rực rỡ theo cách riêng của mình nhé!
               </p>
+               <p>
+                Hy vọng em thấy vui khi nhận được món quà nhỏ do anh làm này 🌸.
+              </p>
+              <p>
+                Nhân ngày 20/10, anh muốn gửi đến em đôi dòng tâm sự từ đáy lòng. Nếu em không để ý thì 6 ngày nữa là cũng được 4 tháng biết đến nhau đó (nghe hơi kì nhỉ 😓), Tuy chưa được lâu nhưng có gì đó trong anh đã rung động với ebong rồi. 
+              </p>
+              <p>
+                Nếu hỏi sao lại rung động thì có thể từ lần đầu ngồi discord hôm đó anh thấy cái cách em cười khi chơi với bạn trên tiktok và sự đáng yêu, tích cực của em, nên anh mới mạnh dạn rep story để làm quen 💌.
+              </p>
               <div class="letter-question">
-                <p>Anh có lẽ biết em Bống trải qua một mối tình không mấy đẹp, nhưng anh hy vọng em sẽ không vì vậy mà mất đi niềm tin vào tình yêu. Hay việc chuyên tâm vào học hành, anh ủng hộ và cũng muốn là một người đồng hành cùng em Bống trong quá trình đó.</p>
-                <p>Không biết em Bống có thể suy nghĩ kỹ về vấn đề này và cho chúng ta cơ hội để cùng nhau tìm hiểu nhiều hơn và chủ động với nhau hơn không?</p>
+                <p>Có lẽ anh biết một chút là em đã trải qua một mối tình không mấy đẹp, nhưng anh hy vọng em sẽ không vì vậy mà mất đi niềm tin vào tình yêu. Hay việc chuyên tâm vào học hành, anh ủng hộ và cũng muốn là một người đồng hành cùng em Bống trong quá trình đó.</p>
+                <p>Anh muốn hiểu thêm về em Bống và muốn có sự xuất hiện của mình trong cuộc sống thường ngày của em.</p>
+                <p>Không biết em Bống có thể suy nghĩ kỹ về vấn đề này và cho chúng ta cơ hội để cùng nhau tìm hiểu nhiều hơn và chủ động với nhau nhiều hơn không?</p>
               </div>
               <div class="letter-signature">
                 Ký tên nhỏ nhỏ,<br />
-                <span class="handwritten-name">Nhọng Nhại💕</span>
+                <span class="handwritten-name">Trọng 💕</span>
               </div>
             </div>
 
@@ -364,19 +372,19 @@
           <div class="modal-body-content">
             <div class="reply-header">
               <span class="reply-badge" id="reply-badge">💌 Lời Hồi Đáp Của Bé</span>
-              <h2 class="modal-title" id="reply-title">Bé có muốn nhắn nhủ gì với anh không nè 💕</h2>
+              <h2 class="modal-title" id="reply-title">HIHI vui quá, em bé có thể phản hồi cho anh biết ở đây hoặc muốn nhắn nhủ gì nho nhỏ đến anh không 💕</h2>
               <p class="modal-desc" id="reply-desc">Mọi lời nhắn nhủ, cảm xúc hay chia sẻ của bé đều sẽ được gửi thẳng đến anh ✨</p>
             </div>
 
             <form id="reply-form" class="reply-form">
               <div class="form-group">
-                <label for="reply-sender">Tên hoặc biệt danh dễ thương của ẻm:</label>
-                <input type="text" id="reply-sender" placeholder="Ví dụ: Em Bống, ebong, Ẻm,..." maxlength="60" />
+                <label for="reply-sender">Biệt danh siêu dễ thương của em:</label>
+                <input type="text" id="reply-sender" placeholder="Ví dụ: Em Bống, ebong, Ẻm,..." maxlength="60" autocomplete="off" spellcheck="false" />
               </div>
 
               <div class="form-group">
                 <label for="reply-message" id="reply-label-message">Lời nhắn gửi dành cho anh: <span class="required">*</span></label>
-                <textarea id="reply-message" rows="4" placeholder="Em muốn chia sẻ điều gì với anh nè..." required></textarea>
+                <textarea id="reply-message" rows="4" placeholder="Em muốn chia sẻ điều gì với anh nè..." required autocomplete="off" spellcheck="false"></textarea>
               </div>
 
               <button type="submit" id="btn-submit-reply" class="btn btn-submit">
@@ -395,13 +403,16 @@
           <h2 class="success-title" id="success-title">Lời nhắn đã bay thẳng đến tim anh rồi! 💕</h2>
           <p class="success-desc" id="success-desc">
             Cảm ơn em Bống rất nhiều vì đã ghé thăm khu vườn này.<br />
-            Chúc em có một ngày 20/10 thật hạnh phúc, ngập tràn tiếng cười và vạn điều như ý!
+            Hy vọng món quà nhỏ anh tự làm này làm em bống cười mỉm 💕!
           </p>
           <button id="btn-replay" class="btn btn-outline">
-            🌸 Thưởng thức lại vườn hoa
+            🌸 Quay lại ngắm vườn hoa của mình
           </button>
         </div>
       </div>
+
+      <!-- Hiệu ứng Mưa Rơi Các Chữ Ngọt Ngào (Khi Đồng Ý / Suy Nghĩ Lại) -->
+      <div id="text-rain-container" class="text-rain-container" aria-hidden="true"></div>
 
     </div>
 

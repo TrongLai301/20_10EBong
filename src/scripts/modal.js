@@ -3,13 +3,20 @@
  */
 import confetti from 'canvas-confetti';
 import { saveResponse } from './supabase.js';
+import { TextRainManager, DEFAULT_RAIN_WORDS } from './textRain.js';
+import { sfx } from './sfx.js';
 
 export class ModalManager {
-  constructor({ onReplay, onCloseReply, onAgreed, onRejected }) {
+  constructor({ onReplay, onCloseReply, onAgreed, onRejected, onModalOpen, onModalClose }) {
     this.onReplay = onReplay;
     this.onCloseReply = onCloseReply;
     this.onAgreed = onAgreed;
     this.onRejected = onRejected;
+    this.onModalOpen = onModalOpen;
+    this.onModalClose = onModalClose;
+
+    // Trình quản lý hiệu ứng mưa rơi chữ khi đồng ý / suy nghĩ lại
+    this.textRain = new TextRainManager({ words: DEFAULT_RAIN_WORDS });
 
     this.currentChoice = 'yes'; // 'yes', 'no_then_yes', 'no'
     this.currentMode = 'agree'; // 'agree', 'reconsidered', 'reject'
@@ -64,6 +71,7 @@ export class ModalManager {
     if (this.closeConfirmBtn) {
       this.closeConfirmBtn.addEventListener('click', () => {
         this.hideConfirmModal();
+        if (this.textRain) this.textRain.clear();
         if (this.onCloseReply) this.onCloseReply();
       });
     }
@@ -71,7 +79,7 @@ export class ModalManager {
     // Sad modal events
     if (this.btnReconsider) {
       this.btnReconsider.addEventListener('click', () => {
-        // Bấm "Bống suy nghĩ lại rồi nè" -> hiển thị confirm modal
+        // Bấm "Bống suy nghĩ lại rồi nè" -> hiển thị confirm modal và kích hoạt mưa rơi chữ
         this.hideSadModal();
         this.showConfirmModal();
       });
@@ -88,6 +96,7 @@ export class ModalManager {
     // Confirm modal event: Bấm "Tiếp tục nè 🥰" -> mở form phản hồi đồng ý
     if (this.btnConfirmProceed) {
       this.btnConfirmProceed.addEventListener('click', () => {
+        sfx.playAgreeChord();
         this.hideConfirmModal();
         this.showReplyModal({ mode: 'reconsidered' });
       });
@@ -97,6 +106,7 @@ export class ModalManager {
     if (this.closeReplyBtn) {
       this.closeReplyBtn.addEventListener('click', () => {
         this.hideReplyModal();
+        if (this.textRain) this.textRain.clear();
         if (this.onCloseReply) this.onCloseReply();
       });
     }
@@ -119,6 +129,8 @@ export class ModalManager {
   }
 
   showSadModal() {
+    if (this.onModalOpen) this.onModalOpen();
+    if (this.textRain) this.textRain.clear();
     this.currentMode = 'reject';
     this.currentChoice = 'no';
     this.hideConfirmModal();
@@ -135,6 +147,7 @@ export class ModalManager {
   }
 
   showConfirmModal() {
+    if (this.onModalOpen) this.onModalOpen();
     this.hideSadModal();
     this.hideReplyModal();
     if (this.confirmModal) {
@@ -172,6 +185,7 @@ export class ModalManager {
     this.currentMode = mode;
 
     if (mode === 'reject') {
+      if (this.textRain) this.textRain.clear();
       this.currentChoice = 'no';
 
       // 1. Chuyển Chibi: Ẩn Happy, Hiện Chibi Buồn nhô lên
@@ -197,8 +211,10 @@ export class ModalManager {
         this.btnSubmit.classList.add('btn-reject-submit');
       }
     } else {
-      // Chế độ Đồng Ý (trực tiếp hoặc sau khi suy nghĩ lại)
+      // Chế độ Đồng Ý (trực tiếp hoặc sau khi suy nghĩ lại ấn "Tiếp tục nè")
       this.currentChoice = mode === 'reconsidered' ? 'no_then_yes' : 'yes';
+      // Không hiện text rain ở form nữa, chỉ hiện ở trang garden sau khi gửi
+      if (this.textRain) this.textRain.clear();
 
       // 1. Chuyển Chibi: Hiện Chibi Hạnh Phúc nhô lên, Ẩn Chibi Buồn
       if (this.chibiHappy) this.chibiHappy.classList.remove('hidden');
@@ -208,11 +224,11 @@ export class ModalManager {
       if (this.replyBadge) {
         this.replyBadge.textContent = mode === 'reconsidered' ? '💖 LỜI HỒI ĐÁP NGỌT NGÀO' : '💌 LỜI HỒI ĐÁP CỦA BÉ';
       }
-      if (this.replyTitle) this.replyTitle.textContent = 'Bé có muốn nhắn nhủ gì với anh không nè 💕';
+      if (this.replyTitle) this.replyTitle.textContent = 'HIHI vui quá, em bé có thể phản hồi cho anh biết bé đã đồng ý ở đây hoặc nhắn nhủ gì nho nhỏ đến anh không 💕';
       if (this.replyDesc) {
         this.replyDesc.textContent = mode === 'reconsidered'
-          ? 'Cảm ơn em vì đã suy nghĩ kỹ'
-          : 'Mọi lời nhắn nhủ, cảm xúc hay chia sẻ của em đều sẽ được gửi thẳng đến anh ✨';
+          ? 'Cảm ơn em vì đã suy nghĩ kỹ 💖'
+          : 'Mọi lời nhắn nhủ, cảm xúc hay chia sẻ của em đều sẽ được gửi thẳng đến anh, đừng thoát ra âm thầm nha :(( ✨';
       }
       if (this.replyLabelMessage) {
         this.replyLabelMessage.innerHTML = 'Lời nhắn gửi dành cho anh: <span class="required">*</span>';
@@ -228,6 +244,8 @@ export class ModalManager {
       }
     }
 
+    if (this.onModalOpen) this.onModalOpen();
+
     if (this.replyModal) {
       this.replyModal.classList.remove('hidden');
     }
@@ -238,6 +256,7 @@ export class ModalManager {
   }
 
   hideReplyModal() {
+    if (this.onModalClose) this.onModalClose();
     if (this.replyModal) {
       this.replyModal.classList.add('hidden');
     }
@@ -262,11 +281,13 @@ export class ModalManager {
       this.showSuccessScreen();
 
       if (this.currentChoice === 'no') {
+        if (this.textRain) this.textRain.clear();
         // Nhẹ nhàng, trân trọng khi nhận lời từ chối
         this.fireGentleConfetti();
         if (this.onRejected) this.onRejected();
       } else {
-        // Bùng nổ pháo hoa trái tim khi đồng ý (kể cả lần đầu hay trả lời lại sau suy nghĩ)
+        // Bùng nổ pháo hoa trái tim và kích hoạt mưa rơi chữ lung linh trên trang vườn hoa
+        if (this.textRain) this.textRain.start({ initialBurst: true });
         this.fireHeartConfetti();
         if (this.onAgreed) this.onAgreed();
       }
@@ -295,18 +316,20 @@ export class ModalManager {
 
   showSuccessScreen() {
     if (this.currentChoice === 'no') {
+      if (this.textRain) this.textRain.clear();
       if (this.successTitle) {
         this.successTitle.textContent = 'Cảm ơn nàng đã gửi lời phản hồi 🌸';
       }
       if (this.successDesc) {
-        this.successDesc.innerHTML = 'Cảm ơn em đã chia sẻ những gì trong lòng mình.<br />Chúc bông hoa ấy luôn nở rộ và phát sáng trong mọi khu vườn cô ấy lựa chọn.';
+        this.successDesc.innerHTML = 'Cảm ơn em đã chia sẻ những gì trong lòng mình.<br />Chúc bông hoa ấy luôn nở rộ và phát sáng trong mọi khu vườn cô ấy lựa chọn.<br /> Hy vọng món quà nhỏ này khiến em mỉm cười.';
       }
     } else {
+      if (this.textRain) this.textRain.start({ initialBurst: true });
       if (this.successTitle) {
         this.successTitle.textContent = 'Lời nhắn đã bay thẳng đến tim anh rồi! 💕';
       }
       if (this.successDesc) {
-        this.successDesc.innerHTML = 'Cảm ơn em Bống rất nhiều vì đã ghé thăm khu vườn này.<br />Chúc bé bống có một ngày 20/10 thật hạnh phúc, ngập tràn tiếng cười và vạn điều như ý!';
+        this.successDesc.innerHTML = 'Cảm ơn em Bống rất nhiều vì đã ghé thăm khu vườn này.<br />Hy vọng món quà nhỏ anh tự làm này làm em bống cười mỉm 💕';
       }
     }
 
@@ -316,6 +339,13 @@ export class ModalManager {
   }
 
   hideSuccessScreen() {
+    if (this.onModalClose) this.onModalClose();
+    if (this.currentChoice === 'no') {
+      if (this.textRain) this.textRain.clear();
+    } else {
+      // Trở lại trang vườn hoa: Mưa rơi chữ tiếp tục rơi lung linh khắp vườn hoa
+      if (this.textRain) this.textRain.start({ initialBurst: true });
+    }
     if (this.successScreen) {
       this.successScreen.classList.add('hidden');
     }

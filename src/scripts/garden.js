@@ -489,13 +489,28 @@ export class GardenCanvas {
   }
 
   loop() {
+    if (this.isPaused) return;
     const now = performance.now();
     this.update(now);
     this.draw(now);
     this.animId = requestAnimationFrame(() => this.loop());
   }
 
+  pause() {
+    this.isPaused = true;
+    if (this.animId) {
+      cancelAnimationFrame(this.animId);
+      this.animId = null;
+    }
+  }
+
+  resume() {
+    if (!this.isPaused) return;
+    this.isPaused = false;
+    this.loop();
+  }
+
   destroy() {
-    if (this.animId) cancelAnimationFrame(this.animId);
+    this.pause();
   }
 }

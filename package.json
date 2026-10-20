@@ -1,0 +1,20 @@
+{
+  "name": "romantic-gift-20-10",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host",
+    "build": "vite build",
+    "preview": "vite preview --host"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.49.1",
+    "canvas-confetti": "^1.9.4",
+    "qrcode": "^1.5.4"
+  },
+  "devDependencies": {
+    "sharp": "^0.35.5",
+    "vite": "^6.2.0"
+  }
+}

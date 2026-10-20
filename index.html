@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <title>Gửi Tặng Cô Gái Nhỏ 20/10 ✨🌸</title>
+    <meta name="description" content="Một món quà nhỏ ngọt ngào và khu vườn hoa nở rộ dành riêng cho ngày 20/10 gửi đến em Bống." />
+    
+    <!-- Favicon & Mobile Web App -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌸</text></svg>" />
+    <meta name="theme-color" content="#110d26" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <!-- OpenGraph Metadata (Zalo, Facebook, Messenger preview) -->
+    <meta property="og:title" content="Gửi Tặng Cô Gái Nhỏ 20/10 ✨🌸" />
+    <meta property="og:description" content="Khu vườn hoa lung linh và một bức thư tay đặc biệt dành riêng cho em Bống ngày 20/10." />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="vi_VN" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Outfit:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,600;0,700;1,500&display=swap" rel="stylesheet" />
+
+    <link rel="stylesheet" href="/src/styles/base.css" />
+    <link rel="stylesheet" href="/src/styles/garden.css" />
+    <link rel="stylesheet" href="/src/styles/letter.css" />
+    <link rel="stylesheet" href="/src/styles/modal.css" />
+  </head>
+  <body>
+    <div id="app">
+      <!-- Background & Canvas Vườn hoa -->
+      <canvas id="garden-canvas"></canvas>
+
+      <!-- Thanh điều khiển âm thanh & mở thư nhanh -->
+      <header class="top-controls">
+        <button id="music-toggle-btn" class="icon-btn" aria-label="Bật/Tắt nhạc nền" title="Bật/Tắt nhạc">
+          <span class="music-icon">🎵</span>
+          <span class="music-text">Bật nhạc</span>
+        </button>
+
+        <button id="quick-open-btn" class="quick-btn hidden" title="Xem lại thư">
+          <span>💌 Xem lại thư</span>
+        </button>
+      </header>
+
+      <!-- Dòng chữ chúc mừng 20/10 phát sáng (Hiển thị mở màn 0s - 10s) -->
+      <div id="greeting-banner" class="greeting-banner">
+        <div class="sparkle-badge">✨ 20 · 10 · 2026 ✨</div>
+        <h1 class="greeting-title">Chúc em Bống một ngày 20/10 thật rực rỡ và yêu đời!</h1>
+        <p class="greeting-subtitle">Mong nụ cười của em luôn tỏa sáng như những đóa hoa trong khu vườn nhỏ này 🌸</p>
+        <p class="greeting-subtitle greeting-coming-soon" id="greeting-coming-soon">Đừng vội đi đâu nhé, có một cái gì đó sắp đến!!! ✨</p>
+      </div>
+
+      <!-- Toast thông báo có thư (Sau 10s hoặc bấm sớm) -->
+      <div id="letter-toast" class="letter-toast hidden">
+        <div class="toast-avatar">💌</div>
+        <div class="toast-body">
+          <div class="toast-title">Bé Bống có bức thư nho nhỏ nè!</div>
+          <div class="toast-desc">Mở phong bì để mở xem nhé ✨</div>
+        </div>
+      </div>
+
+      <!-- Phong bì thư 3D (Xuất hiện sau 10s) -->
+      <div id="envelope-section" class="envelope-section hidden">
+        <div class="envelope-wrapper" id="envelope-wrapper">
+          <div class="envelope" id="envelope">
+            <!-- Thân sau phong bì -->
+            <div class="envelope-back"></div>
+            <!-- Lớp giấy preview nhú lên khi nắp mở -->
+            <div class="envelope-paper-peek"></div>
+            <!-- Thân trước phong bì phẳng đẹp, tuyệt đối không bị sừng nhọn -->
+            <div class="envelope-pocket">
+              <div class="pocket-left"></div>
+              <div class="pocket-right"></div>
+              <div class="pocket-bottom"></div>
+            </div>
+            <!-- Nắp phong bì lật 3D bo tròn góc chuẩn xác với thân phong bì -->
+            <div class="envelope-flap">
+              <svg class="flap-svg" viewBox="0 0 310 120" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="flapGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#b83350" />
+                    <stop offset="100%" stop-color="#d64f6e" />
+                  </linearGradient>
+                </defs>
+                <path d="M 0,14 Q 0,0 14,0 L 296,0 Q 310,0 310,14 L 155,115 Z" fill="url(#flapGradient)" />
+              </svg>
+            </div>
+            <!-- Con dấu sáp trái tim -->
+            <div class="envelope-seal" id="envelope-seal" title="Chạm để mở thư">
+              <div class="seal-heart">💌</div>
+              <div class="seal-glow"></div>
+            </div>
+          </div>
+          <div class="envelope-hint">Mở phong bì xem chút tâm thư của anh nhé💕</div>
+        </div>
+      </div>
+
+      <!-- Nút "Bống có muốn suy nghĩ lại không?" ở giữa màn hình khi từ chối -->
+      <div id="center-reconsider-container" class="center-reconsider-container hidden">
+        <button id="btn-center-reconsider" class="btn btn-center-reconsider pulse-btn" title="Suy nghĩ lại nè">
+          <span>🌸 Bống có muốn suy nghĩ lại không? 💕</span>
+        </button>
+      </div>
+
+      <!-- Modal Đọc Bức Thư Tay Cổ Điển -->
+      <div id="letter-modal" class="letter-modal-overlay hidden">
+        <div class="letter-modal-card">
+          <button id="btn-close-letter" class="letter-close-btn" title="Thu nhỏ bức thư" aria-label="Đóng thư">✕</button>
+          
+          <div class="letter-paper">
+            <div class="letter-header">
+              <span class="stamp-mark">🌸 20/10 SPECIAL</span>
+              <span class="letter-date" id="letter-current-date">Ngày 20 tháng 10</span>
+            </div>
+
+            <div class="letter-content">
+              <p class="salutation">Gửi em Bống đáng yêu,</p>
+              <p>
+                Nhân ngày 20/10, anh muốn gửi đến em đôi dòng tâm sự nắn nót từ đáy lòng. 6 ngày nữa là cũng được 4 tháng biết đến nhau đó, Tuy chưa được lâu nhưng có gì đó trong anh đã rung động với ebong rồi.
+              </p>
+              <p>
+                Chúc em một ngày 20/10 thật trọn vẹn, luôn xinh đẹp, hạnh phúc, luôn được yêu thương chiều chuộng và mãi rực rỡ theo cách riêng của mình nhé!
+              </p>
+              <div class="letter-question">
+                <p>Anh có lẽ biết em Bống trải qua một mối tình không mấy đẹp, nhưng anh hy vọng em sẽ không vì vậy mà mất đi niềm tin vào tình yêu. Hay việc chuyên tâm vào học hành, anh ủng hộ và cũng muốn là một người đồng hành cùng em Bống trong quá trình đó.</p>
+                <p>Không biết em Bống có thể suy nghĩ kỹ về vấn đề này và cho chúng ta cơ hội để cùng nhau tìm hiểu nhiều hơn và chủ động với nhau hơn không?</p>
+              </div>
+              <div class="letter-signature">
+                Ký tên nhỏ nhỏ,<br />
+                <span class="handwritten-name">Nhọng Nhại💕</span>
+              </div>
+            </div>
+
+            <!-- 2 nút bấm tương tác Có / Không -->
+            <div class="letter-actions">
+              <button id="btn-accept" class="btn btn-yes">
+                <span class="btn-icon">❤️</span> Đồng ý nha!
+              </button>
+              <button id="btn-reject" class="btn btn-no">
+                Thôi ngại lắm...
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Tone Buồn khi bấm "Không" (Kèm Chibi Buồn nhô lên) -->
+      <div id="sad-modal" class="modal-overlay hidden">
+        <div class="modal-card sad-card has-chibi">
+          <button id="close-sad-modal" class="close-btn" aria-label="Đóng popup">×</button>
+          <!-- Chibi Động Buồn Nhô Lên Khung -->
+          <div class="chibi-peek-container" id="chibi-sad">
+            <div class="chibi-bubble">Huhu... 🥺</div>
+            <svg class="chibi-svg chibi-sad-anim" viewBox="0 0 100 90">
+              <!-- Tai rủ xuống buồn -->
+              <ellipse class="chibi-ear-left-sad" cx="24" cy="32" rx="12" ry="18" fill="#ffb7b2" transform="rotate(-30 24 32)" />
+              <ellipse class="chibi-ear-right-sad" cx="76" cy="32" rx="12" ry="18" fill="#ffb7b2" transform="rotate(30 76 32)" />
+              <ellipse cx="25" cy="32" rx="6" ry="11" fill="#ffd1dc" transform="rotate(-30 25 32)" />
+              <ellipse cx="75" cy="32" rx="6" ry="11" fill="#ffd1dc" transform="rotate(30 75 32)" />
+              <!-- Đầu bé chibi -->
+              <ellipse cx="50" cy="52" rx="38" ry="34" fill="#fffaf7" stroke="#eecbc7" stroke-width="2" />
+              <!-- Má hồng nhạt -->
+              <ellipse cx="28" cy="58" rx="8" ry="5" fill="#ffccd5" opacity="0.8" />
+              <ellipse cx="72" cy="58" rx="8" ry="5" fill="#ffccd5" opacity="0.8" />
+              <!-- Mắt to ươn ướt -->
+              <ellipse cx="36" cy="48" rx="5" ry="6" fill="#3a2e39" />
+              <ellipse cx="64" cy="48" rx="5" ry="6" fill="#3a2e39" />
+              <circle cx="34" cy="46" r="2.2" fill="#fff" />
+              <circle cx="62" cy="46" r="2.2" fill="#fff" />
+              <circle cx="38" cy="51" r="1.2" fill="#fff" />
+              <circle cx="66" cy="51" r="1.2" fill="#fff" />
+              <!-- Giọt nước mắt rơi -->
+              <path class="chibi-tear chibi-tear-left" d="M 33,56 C 30,62 30,66 33,68 C 36,66 36,62 33,56 Z" fill="#64b5f6" />
+              <path class="chibi-tear chibi-tear-right" d="M 67,56 C 64,62 64,66 67,68 C 70,66 70,62 67,56 Z" fill="#64b5f6" />
+              <!-- Miệng mếu máo -->
+              <path d="M 46,60 Q 50,56 54,60" fill="transparent" stroke="#b05d6e" stroke-width="2" stroke-linecap="round" />
+              <!-- Hai tay ôm mép khung -->
+              <ellipse cx="30" cy="78" rx="7" ry="6" fill="#fffaf7" stroke="#eecbc7" stroke-width="1.5" />
+              <ellipse cx="70" cy="78" rx="7" ry="6" fill="#fffaf7" stroke="#eecbc7" stroke-width="1.5" />
+            </svg>
+          </div>
+
+          <div class="modal-body-content">
+            <h2 class="modal-title">Em thật sự chọn "Không" sao?...</h2>
+            <p class="modal-desc">
+              Anh đã chuẩn bị khu vườn hoa và nắn nót từng dòng thư rất lâu, chỉ mong mang lại niềm vui cho em Bống trong ngày hôm nay thôi đấy...
+            </p>
+            <p class="modal-prompt">Em có muốn suy nghĩ lại một xíu hơm? 🌸</p>
+            
+            <div class="modal-buttons">
+              <button id="btn-reconsider" class="btn btn-primary pulse-btn">
+                <span>💕 Bống suy nghĩ lại rồi nè!</span>
+              </button>
+              <button id="btn-still-no" class="btn btn-ghost">
+                <span>Vẫn không nha... 🥺</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Xác Nhận khi bấm "Suy nghĩ lại" (Chibi Vui Sướng Vỡ Òa) -->
+      <div id="confirm-modal" class="modal-overlay hidden">
+        <div class="modal-card confirm-card has-chibi">
+          <button id="close-confirm-modal" class="close-btn" aria-label="Đóng popup">×</button>
+          <!-- Chibi Động Vui Sướng Nhảy Múa Nhô Lên Khung -->
+          <div class="chibi-peek-container" id="chibi-joy">
+            <div class="chibi-bubble joy-bubble">Yaaay! 🎉</div>
+            <svg class="chibi-svg chibi-joy-anim" viewBox="0 0 100 90">
+              <!-- Tia hào quang lấp lánh -->
+              <path class="chibi-sparkle s1" d="M 12,20 L 16,16 L 20,20 L 16,24 Z" fill="#ffd166" />
+              <path class="chibi-sparkle s2" d="M 80,18 L 84,14 L 88,18 L 84,22 Z" fill="#ffd166" />
+              <path class="chibi-sparkle s3" d="M 50,6 L 53,2 L 56,6 L 53,10 Z" fill="#ff70a6" />
+              <!-- Tai vểnh hào hứng -->
+              <ellipse class="chibi-ear-joy-left" cx="28" cy="24" rx="11" ry="18" fill="#ffb7b2" transform="rotate(-15 28 24)" />
+              <ellipse class="chibi-ear-joy-right" cx="72" cy="24" rx="11" ry="18" fill="#ffb7b2" transform="rotate(15 72 24)" />
+              <ellipse cx="28" cy="24" rx="6" ry="11" fill="#ffd1dc" transform="rotate(-15 28 24)" />
+              <ellipse cx="72" cy="24" rx="6" ry="11" fill="#ffd1dc" transform="rotate(15 72 24)" />
+              <!-- Đầu bé chibi -->
+              <ellipse cx="50" cy="50" rx="38" ry="34" fill="#fffaf7" stroke="#eecbc7" stroke-width="2" />
+              <!-- Má hồng đập nhịp -->
+              <ellipse class="chibi-blush" cx="26" cy="55" rx="9" ry="6" fill="#ff758c" opacity="0.85" />
+              <ellipse class="chibi-blush" cx="74" cy="55" rx="9" ry="6" fill="#ff758c" opacity="0.85" />
+              <!-- Mắt cười tít hạnh phúc (^_^) -->
+              <path d="M 30,48 Q 37,40 44,48" fill="transparent" stroke="#3a2e39" stroke-width="3.5" stroke-linecap="round" />
+              <path d="M 56,48 Q 63,40 70,48" fill="transparent" stroke="#3a2e39" stroke-width="3.5" stroke-linecap="round" />
+              <!-- Miệng cười tươi rộng mở -->
+              <path d="M 43,56 Q 50,68 57,56 Z" fill="#ff5e7e" stroke="#3a2e39" stroke-width="1.5" />
+              <ellipse cx="50" cy="62" rx="4" ry="2.5" fill="#ffb7b2" />
+              <!-- Hai tay giơ cao ăn mừng -->
+              <ellipse class="chibi-hand-joy-left" cx="18" cy="46" rx="7" ry="6" fill="#fffaf7" stroke="#eecbc7" stroke-width="1.5" />
+              <ellipse class="chibi-hand-joy-right" cx="82" cy="46" rx="7" ry="6" fill="#fffaf7" stroke="#eecbc7" stroke-width="1.5" />
+            </svg>
+          </div>
+
+          <div class="modal-body-content">
+            <span class="confirm-badge">✨ THẬT VẬY SAO? ✨</span>
+            <h2 class="modal-title">Thật vậy sao? Em không trêu anh chứ? 🥹</h2>
+            <p class="modal-desc">
+              Anh vui xỉu luôn áaaaaaa! Cảm ơn em Bống nhiều thật nhiều vì đã đồng ý nhé!
+            </p>
+            
+            <div class="modal-buttons">
+              <button id="btn-confirm-proceed" class="btn btn-primary pulse-btn">
+                <span>Tiếp tục nè 🥰</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Lời Hồi Đáp (Linh hoạt: Đồng Ý kèm Chibi Hạnh Phúc HOẶC Từ Chối kèm Chibi Buồn) -->
+      <div id="reply-modal" class="modal-overlay hidden">
+        <div class="modal-card reply-card has-chibi" id="reply-card-element">
+          <!-- Chibi Động Hạnh Phúc nhô lên (cho case Đồng Ý) -->
+          <div class="chibi-peek-container" id="chibi-happy">
+            <div class="chibi-bubble happy-bubble">Yêu quá đi! ❤️</div>
+            <svg class="chibi-svg chibi-happy-anim" viewBox="0 0 100 90">
+              <!-- Tim bay lơ lửng -->
+              <path class="chibi-floating-heart h1" d="M 20,16 C 18,12 12,12 12,17 C 12,22 20,26 20,26 C 20,26 28,22 28,17 C 28,12 22,12 20,16 Z" fill="#ff5e7e" />
+              <path class="chibi-floating-heart h2" d="M 80,14 C 78,10 72,10 72,15 C 72,20 80,24 80,24 C 80,24 88,20 88,15 C 88,10 82,10 80,14 Z" fill="#ff758c" />
+              <!-- Tai lúc lắc nhẹ -->
+              <ellipse class="chibi-ear-happy-left" cx="28" cy="26" rx="11" ry="18" fill="#ffb7b2" transform="rotate(-15 28 26)" />
+              <ellipse class="chibi-ear-happy-right" cx="72" cy="26" rx="11" ry="18" fill="#ffb7b2" transform="rotate(15 72 26)" />
+              <ellipse cx="28" cy="26" rx="6" ry="11" fill="#ffd1dc" transform="rotate(-15 28 26)" />
+              <ellipse cx="72" cy="26" rx="6" ry="11" fill="#ffd1dc" transform="rotate(15 72 26)" />
+              <!-- Đầu bé chibi -->
+              <ellipse cx="50" cy="50" rx="38" ry="34" fill="#fffaf7" stroke="#eecbc7" stroke-width="2" />
+              <!-- Má hồng xinh -->
+              <ellipse cx="26" cy="56" rx="9" ry="6" fill="#ff758c" opacity="0.85" />
+              <ellipse cx="74" cy="56" rx="9" ry="6" fill="#ff758c" opacity="0.85" />
+              <!-- Mắt cười tít đáng yêu -->
+              <path d="M 32,48 Q 38,42 44,48" fill="transparent" stroke="#3a2e39" stroke-width="3" stroke-linecap="round" />
+              <path d="M 56,48 Q 62,42 68,48" fill="transparent" stroke="#3a2e39" stroke-width="3" stroke-linecap="round" />
+              <!-- Miệng cười chúm chím -->
+              <path d="M 46,58 Q 50,64 54,58" fill="transparent" stroke="#b05d6e" stroke-width="2.5" stroke-linecap="round" />
+              <!-- Hai tay ôm mép khung -->
+              <ellipse cx="32" cy="78" rx="7" ry="6" fill="#fffaf7" stroke="#eecbc7" stroke-width="1.5" />
+              <ellipse cx="68" cy="78" rx="7" ry="6" fill="#fffaf7" stroke="#eecbc7" stroke-width="1.5" />
+            </svg>
+          </div>
+
+          <!-- Chibi Động Buồn / Ôm Tim Vỡ nhô lên (cho case Từ Chối) -->
+          <div class="chibi-peek-container hidden" id="chibi-broken">
+            <div class="chibi-bubble broken-bubble">Đau lòng quá... 💔</div>
+            <svg class="chibi-svg chibi-broken-anim" viewBox="0 0 100 90">
+              <!-- Trái tim vỡ nhỏ lơ lửng -->
+              <g class="chibi-broken-heart-icon" transform="translate(68, 6) scale(0.8)">
+                <path d="M 15,10 C 13,6 7,6 7,11 C 7,16 14,21 15,22 L 15,10 Z" fill="#e63946" />
+                <path d="M 16,10 C 18,6 24,6 24,11 C 24,16 17,21 16,22 L 16,10 Z" fill="#e63946" />
+              </g>
+              <!-- Tai rủ xuống buồn -->
+              <ellipse cx="24" cy="32" rx="12" ry="18" fill="#ffb7b2" transform="rotate(-30 24 32)" />
+              <ellipse cx="76" cy="32" rx="12" ry="18" fill="#ffb7b2" transform="rotate(30 76 32)" />
+              <ellipse cx="25" cy="32" rx="6" ry="11" fill="#ffd1dc" transform="rotate(-30 25 32)" />
+              <ellipse cx="75" cy="32" rx="6" ry="11" fill="#ffd1dc" transform="rotate(30 75 32)" />
+              <!-- Đầu bé chibi -->
+              <ellipse cx="50" cy="52" rx="38" ry="34" fill="#fffaf7" stroke="#eecbc7" stroke-width="2" />
+              <!-- Má hồng nhạt -->
+              <ellipse cx="28" cy="58" rx="8" ry="5" fill="#ffccd5" opacity="0.8" />
+              <ellipse cx="72" cy="58" rx="8" ry="5" fill="#ffccd5" opacity="0.8" />
+              <!-- Mắt to ngân ngấn nước mắt -->
+              <ellipse cx="36" cy="48" rx="5" ry="6" fill="#3a2e39" />
+              <ellipse cx="64" cy="48" rx="5" ry="6" fill="#3a2e39" />
+              <circle cx="34" cy="46" r="2.2" fill="#fff" />
+              <circle cx="62" cy="46" r="2.2" fill="#fff" />
+              <path class="chibi-tear chibi-tear-left" d="M 33,56 C 30,62 30,66 33,68 C 36,66 36,62 33,56 Z" fill="#64b5f6" />
+              <!-- Miệng buồn thiu -->
+              <path d="M 45,61 Q 50,56 55,61" fill="transparent" stroke="#b05d6e" stroke-width="2.5" stroke-linecap="round" />
+              <!-- Hai tay ôm mép khung -->
+              <ellipse cx="30" cy="78" rx="7" ry="6" fill="#fffaf7" stroke="#eecbc7" stroke-width="1.5" />
+              <ellipse cx="70" cy="78" rx="7" ry="6" fill="#fffaf7" stroke="#eecbc7" stroke-width="1.5" />
+            </svg>
+          </div>
+
+          <button id="close-reply-modal" class="close-btn" aria-label="Đóng popup">×</button>
+          
+          <div class="modal-body-content">
+            <div class="reply-header">
+              <span class="reply-badge" id="reply-badge">💌 Lời Hồi Đáp Của Bé</span>
+              <h2 class="modal-title" id="reply-title">Bé có muốn nhắn nhủ gì với anh không nè 💕</h2>
+              <p class="modal-desc" id="reply-desc">Mọi lời nhắn nhủ, cảm xúc hay chia sẻ của bé đều sẽ được gửi thẳng đến anh ✨</p>
+            </div>
+
+            <form id="reply-form" class="reply-form">
+              <div class="form-group">
+                <label for="reply-sender">Tên hoặc biệt danh dễ thương của ẻm:</label>
+                <input type="text" id="reply-sender" placeholder="Ví dụ: Em Bống, ebong, Ẻm,..." maxlength="60" />
+              </div>
+
+              <div class="form-group">
+                <label for="reply-message" id="reply-label-message">Lời nhắn gửi dành cho anh: <span class="required">*</span></label>
+                <textarea id="reply-message" rows="4" placeholder="Em muốn chia sẻ điều gì với anh nè..." required></textarea>
+              </div>
+
+              <button type="submit" id="btn-submit-reply" class="btn btn-submit">
+                <span class="btn-text" id="btn-submit-text">Gửi lời hồi đáp ❤️</span>
+                <span class="spinner hidden"></span>
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Màn hình Cảm Ơn Thành Công -->
+      <div id="success-screen" class="success-screen hidden">
+        <div class="success-card">
+          <div class="success-icon">💖</div>
+          <h2 class="success-title" id="success-title">Lời nhắn đã bay thẳng đến tim anh rồi! 💕</h2>
+          <p class="success-desc" id="success-desc">
+            Cảm ơn em Bống rất nhiều vì đã ghé thăm khu vườn này.<br />
+            Chúc em có một ngày 20/10 thật hạnh phúc, ngập tràn tiếng cười và vạn điều như ý!
+          </p>
+          <button id="btn-replay" class="btn btn-outline">
+            🌸 Thưởng thức lại vườn hoa
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Audio Element (BINZ x ĐEN - CHO MÌNH EM) -->
+    <audio id="bgm-audio" src="/audio/bgm.mp3" autoplay loop preload="auto">
+      <source src="/audio/bgm.mp3" type="audio/mp3" />
+    </audio>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

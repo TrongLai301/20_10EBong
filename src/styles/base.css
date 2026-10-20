@@ -1,0 +1,119 @@
+/* Base CSS & Design Tokens */
+:root {
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-handwriting: 'Dancing Script', cursive, cursive;
+  --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Colors */
+  --color-bg-start: #110d26;
+  --color-bg-mid: #281a45;
+  --color-bg-end: #441e4d;
+  --color-pink-primary: #ff758c;
+  --color-pink-glow: #ff7eb3;
+  --color-pink-light: #ffd1dc;
+  --color-gold: #f6d365;
+  --color-gold-dark: #fda085;
+  --color-text-main: #ffffff;
+  --color-text-muted: rgba(255, 255, 255, 0.82);
+  --color-text-dark: #2c2533;
+  --color-paper: #fefcf7;
+
+  /* Glassmorphism */
+  --glass-bg: rgba(255, 255, 255, 0.12);
+  --glass-border: rgba(255, 255, 255, 0.22);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+
+  /* Transitions */
+  --transition-smooth: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-spring: all 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+  min-height: 100dvh;
+  overflow: hidden;
+  overscroll-behavior: none;
+  font-family: var(--font-sans);
+  background: radial-gradient(ellipse at bottom, var(--color-bg-mid) 0%, var(--color-bg-start) 70%, #070510 100%);
+  color: var(--color-text-main);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+#app {
+  position: relative;
+  width: 100vw;
+  height: 100%;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+/* Utilities */
+.hidden {
+  display: none !important;
+}
+
+/* Common Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 22px;
+  border-radius: 999px;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 15px;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  min-height: 44px; /* Chuẩn touch target trên mobile */
+  transition: var(--transition-smooth);
+}
+
+.btn:active {
+  transform: scale(0.96);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--color-pink-primary), var(--color-pink-glow));
+  color: #fff;
+  box-shadow: 0 4px 18px rgba(255, 117, 140, 0.4);
+}
+
+.btn-primary:hover {
+  box-shadow: 0 6px 26px rgba(255, 117, 140, 0.65);
+  transform: translateY(-2px);
+}
+
+.btn-ghost {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--color-text-muted);
+  border: 1px solid var(--glass-border);
+}
+
+.btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+.btn-outline {
+  background: transparent;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  padding: 10px 22px;
+}
+
+.btn-outline:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: #fff;
+}
